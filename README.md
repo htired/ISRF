@@ -1,4 +1,6 @@
-# Examples to run the codes
+# ISRF
+
+## Examples to run the codes
 
 1. Pretraining ({dataset}: beauty, sports, and toys.)
 
