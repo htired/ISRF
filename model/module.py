@@ -73,29 +73,14 @@ class Solomon(T5ForConditionalGeneration):
         return adj_mat
 
     def create_user_user_sparse_adjacency(self, sim_user_file, self_connection=False):
-        """
-        创建用户-用户的稀疏邻接矩阵，若用户相似则连边值为 1，否则为 0
-        :param sim_user_file: 包含相似用户信息的文件，形状为 (user_num, 100)
-        :param self_connection: 是否添加自连接
-        :return: 用户-用户稀疏邻接矩阵 (scipy.sparse.csr_matrix)
-        """
-        # 加载用户相似性数据 (形状: (user_num, 100))
+      
         with open(sim_user_file, 'rb') as f:
-            sim_user_data = pickle.load(f)  # sim_user_data 的形状为 (user_num, 100)
-
-        user_num, top_k = sim_user_data.shape  # 用户数量和每个用户的相似用户数量
-
-        # 构建邻接矩阵的行和列索引
+            sim_user_data = pickle.load(f)  
+        user_num, top_k = sim_user_data.shape
         row_idx = np.repeat(np.arange(user_num), top_k) + 1
         col_idx = sim_user_data.flatten() + 1
-
-        # 权重固定为 1，表示相似用户之间有连边
         weights = np.ones_like(row_idx, dtype=np.float32)
-
-        # 创建稀疏矩阵
         adj_mat = sp.csr_matrix((weights, (row_idx, col_idx)), shape=(user_num + 1, user_num + 1), dtype=np.float32)
-
-        # 添加自连接 (optional)
         if self_connection:
             adj_mat += sp.eye(user_num + 1, dtype=np.float32)
         return adj_mat
@@ -145,34 +130,18 @@ class Solomon(T5ForConditionalGeneration):
         ui_adj = self.__create_sparse_bipartite_adjacency(training_exp_data)
         norm_adj = self.normalize_graph_mat(ui_adj)
         self.sparse_norm_adj = self.convert_sparse_mat_to_tensor(norm_adj).cuda()
-        ''''''
 
-        # sim_user_file = dataset_dir + "user_pos2pos_{}.pkl".format(k)
-        sim_user_file = dataset_dir + "user_dislike_{}.pkl".format(k)
+        sim_user_file = dataset_dir + "user_preference_{}.pkl".format(k)
         sparse_user_user_adj = self.create_user_user_sparse_adjacency(sim_user_file, self_connection=True)
         sparse_user_user_adj = self.normalize_graph_mat(sparse_user_user_adj)
         self.sparse_user_adj = self.convert_sparse_mat_to_tensor(sparse_user_user_adj).cuda()
 
-        # llm_user_emb = pickle.load(open(dataset_dir + 'pca_user_emb_np.pkl', "rb"))
-        # # 在第一列添加零向量作为 padding
-        # zero_padding = np.zeros((1, llm_user_emb.shape[1]))  # 生成形状为 (1, emb_dim) 的零向量
-        # llm_user_emb = np.vstack([zero_padding, llm_user_emb])  # 拼接到用户嵌入的第一行
-        # self.user_emb = nn.Embedding.from_pretrained(torch.Tensor(llm_user_emb))
-
-
-        # self.user_emb.weight.requires_grad = False
-        # self.adapter_user = nn.Sequential(
-        #     nn.Linear(llm_user_emb.shape[1], int((llm_user_emb.shape[1] + self.shared.weight.size(1)) / 2)),
-        #     nn.Linear(int((llm_user_emb.shape[1] + self.shared.weight.size(1)) / 2), self.shared.weight.size(1))
-        # )
 
         self.user_embs = nn.Embedding(user_num+1, self.shared.weight.size(1), padding_idx=0)
         torch.nn.init.normal_(self.user_embs.weight, mean=0, std=sigma)
 
-
         
         self.align = Contrastive_Loss2()
-        # self.align = nn.KLDivLoss(reduction='batchmean')  # reduction 可以是 'mean', 'sum', 'batchmean' 等
     def graph_convolution(self, num_layer):
         user_embeddings = self.user_embeddings.weight
         item_embeddings = self.item_emb.weight
@@ -253,9 +222,7 @@ class Solomon(T5ForConditionalGeneration):
 
         if users is not None and task_id[0] != 1:
             ''' align_loss'''
-            # 获取学生模型和老师模型的嵌入
             user_emb_llm = self.graph_convolution_llm(self.L_user)[users]
-            # Align Loss
             align_loss = self.align(user_emb_llm, user_emb[users].detach())  # Calculate align loss
 
             ''' align_loss'''
@@ -263,10 +230,8 @@ class Solomon(T5ForConditionalGeneration):
 
         if users is not None and task_id[0] == 1:
             ''' align_loss'''
-            # 获取学生模型和老师模型的嵌入
             user_emb_llm = self.graph_convolution_llm(self.L_user)[users]
             user_embs_seq = torch.mean(self.whole_word_embeddings(whole_word_ids), dim=1)
-            # user_embs_seq = torch.mean(prompt, dim=1)
             
             # Align Loss
             align_loss =self.align(user_emb_llm, user_embs_seq)  # Calculate align loss

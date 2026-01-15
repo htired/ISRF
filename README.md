@@ -9,7 +9,7 @@ python pretrain.py ./data/{dataset}/ --cuda --batch_size 64 --checkpoint ./check
 2. Inference ({dataset}: beauty, sports, and toys.) 
 
 ```bash
-python seq_reranker.py ./data/{dataset}/ --cuda --batch_size 16 --checkpoint ./checkpoint/{dataset}/
-python topn.py ./data/{dataset}/ --cuda --batch_size 16 --checkpoint ./checkpoint/{dataset}/
+python SR.py ./data/{dataset}/ --cuda --batch_size 16 --checkpoint ./checkpoint/{dataset}/
+python DR.py ./data/{dataset}/ --cuda --batch_size 16 --checkpoint ./checkpoint/{dataset}/
 ```
 
