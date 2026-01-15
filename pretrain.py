@@ -39,7 +39,6 @@ parser.add_argument('--negative_num', type=int, default=99,
 # alpha -> direct: {'Sports': 5, 'Beauty': 9, 'Toys': 11} sequential : {'Sports': 1, 'Beauty': 6, 'Toys': 9}
 parser.add_argument('--alpha', type=int, default=11,
                     help='weight of whole-word embeddings')
-# sigma -> direct: {'Sports': 5, 'Beauty': 6, 'Toys': 5} sequential : {'Sports': 5, 'Beauty': 6, 'Toys': 5}
 parser.add_argument('--sigma', type=int, default=5,
                     help='standard deviation of initial whole-word embeddings')
 parser.add_argument('--L', type=int, default=4,
@@ -219,33 +218,7 @@ print(now_time() + 'Start training')
 # Loop over epochs.
 best_val_loss = float('inf')
 endure_count = 0
-# for epoch in range(1, args.epochs + 1):
-#     print(now_time() + 'epoch {}'.format(epoch))
-#     train()
-#     print(now_time() + 'validation')
-#     exp_loss, exp_a_loss = evaluate(exp_iterator)
-#     print(now_time() + 'explanation loss {:4.4f}, exp_align_loss{:4.4f}'.format(exp_loss, exp_a_loss))
-#     seq_loss, seq_a_loss = evaluate(seq_iterator)
-#     print(now_time() + 'sequential loss {:4.4f}, seq_align_loss{:4.4f}'.format(seq_loss,seq_a_loss))
-#     topn_loss, topn_a_loss = evaluate(topn_iterator)
-#     print(now_time() + 'top-N loss {:4.4f}, topn_align_loss{:4.4f}'.format(topn_loss,topn_a_loss))
-#     val_loss_text = (topn_loss + seq_loss + exp_loss) / 3
-#     val_align_loss = (topn_a_loss  + exp_a_loss) / 2
-#     val_loss = val_loss_text + val_align_loss + seq_a_loss
-#
-#     print(now_time() + 'total loss {:4.4f} text loss {:4.4f}, align_loss{:4.4f}, seq_align_loss{:4.4f}'.format(val_loss, val_loss_text, val_align_loss,seq_a_loss))
-#     # Save the model if the validation loss is the best we've seen so far.
-#     if val_loss < best_val_loss:
-#         best_val_loss = val_loss
-#         with open(model_path, 'wb') as f:
-#             torch.save(model, f)
-#     else:
-#         endure_count += 1
-#         print(now_time() + 'Endured {} time(s)'.format(endure_count))
-#         if endure_count == args.endure_times:
-#             print(now_time() + 'Cannot endure it anymore | Exiting from early stop')
-#
-#             break
+
 for epoch in range(1, args.epochs + 1):
     print(now_time() + 'epoch {}'.format(epoch))
     train()
