@@ -6,7 +6,7 @@ import torch
 import argparse
 from transformers import T5Tokenizer
 from model.module_cuda1_1_n_word_align import Solomon
-from util1.utils_1_who_align import ExpDataLoader, SeqDataLoader, TrainBatchify, ExpBatchify, SeqBatchify, TopNBatchify, now_time
+from util.utilsimport ExpDataLoader, SeqDataLoader, TrainBatchify, ExpBatchify, SeqBatchify, TopNBatchify, now_time
 
 parser = argparse.ArgumentParser(description='ELMRec')
 parser.add_argument('--data_dir', type=str, default=None,
