@@ -2,7 +2,7 @@
 
 This is the official implementation of the WWW 2026 paper: **"Iterative Semantic Reasoning from Individual to Group Interests for Generative Recommendation with LLMs"**.
 
-![ISRF.drawio](C:\Deeplearning\my\ISRF\ISRF.drawio.png)
+![ISRF.drawio](https://raw.githubusercontent.com/htired/ISRF/refs/heads/main/ISRF.drawio.png))
 
 ## :bookmark_tabs:Data preprocessing
 
