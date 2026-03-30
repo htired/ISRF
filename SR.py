@@ -6,10 +6,10 @@ import torch
 import random
 import argparse
 from transformers import T5Tokenizer
-from util1.utils import SeqDataLoader, SeqBatchify, now_time, evaluate_ndcg, evaluate_hr,evaluate_hr_long_short,evaluate_ndcg_long_short,metric_pop_report
+from util.utils import SeqDataLoader, SeqBatchify, now_time, evaluate_ndcg, evaluate_hr
 
 
-parser = argparse.ArgumentParser(description='ELMRec')
+parser = argparse.ArgumentParser(description='ISRF')
 parser.add_argument('--data_dir', type=str, default=None,
                     help='directory for loading the data')
 parser.add_argument('--model_version', type=int, default=0,
@@ -18,20 +18,15 @@ parser.add_argument('--batch_size', type=int, default=32,
                     help='batch size')
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
-parser.add_argument('--checkpoint', type=str, default='./ELMRec/',
+parser.add_argument('--checkpoint', type=str, default='./ISRF/',
                     help='directory to load the final model')
 parser.add_argument('--num_beams', type=int, default=30,
                     help='number of beams')
 parser.add_argument('--top_n', type=int, default=10,
                     help='number of items to predict')
 
-# both tasks : {'Sports': 10, 'Beauty': 15, 'Toys': 10}
 parser.add_argument('--N', type=int, default=10,
                     help='number of additional candidates')
-
-parser.add_argument('--knn_a', type=int, default=6,
-                    help='')
-
 
 parser.add_argument('--model_saved_name', type=str, default='model',
                     help='')
@@ -40,8 +35,7 @@ parser.add_argument('--data_name', type=str, default='beauty',
 
 parser.add_argument('--gpu', type=int, default='0',
                     help='0; 1')
-parser.add_argument('--seed', type=int, default=10,
-                    help='number of items to predict')
+parser.add_argument('--seed', type=int, default=2025,)
 args = parser.parse_args()
 
 def seed_it(seed):
@@ -125,11 +119,7 @@ def generate():
 
 # Load the best saved model.
 with open(model_path, 'rb') as f:
-    # model = torch.load(f).to(device)
-    # 加载模型并将其放到 GPU 1
     model = torch.load(f, map_location=device)
-    # import numpy as np
-    # np.save("whole_word_embeddings_beauty_3_order.npy", model.graph_convolution_embeddings(3).detach().cpu().numpy())
 
 # Run on test data.
 print(now_time() + 'Generating recommendations')
@@ -142,7 +132,6 @@ target_items = torch.empty(0)
 for user, item_list in seq_corpus.user2items_positive.items():
     user2item_test[user] = [int(item_list[-1])]
     interacted_items[user] = [int(item_id) for item_id in item_list[:-1]]
-    # 交互序列长度
     user2item_len[user] = len(item_list)
     target_items = torch.cat([target_items, torch.tensor([int(item_list[-1])])])
 idss_predicted = generate()
@@ -164,40 +153,7 @@ for predictions, user in zip(idss_predicted, seq_iterator.user_list):
 
     user2rank_list[user] = prediction_list
 output_dir = args.data_dir
-# with open(os.path.join(output_dir, 'user2item_test_o.json'), 'w') as f:
-#     json.dump(user2item_test, f)
 
-# with open(os.path.join(output_dir, 'user2rank_list_o.json'), 'w') as f:
-#     json.dump(user2rank_list, f)
-
-# user2item_test = {
-#     1: [10, 20],
-#     2: [30],
-#     3: [40, 50]
-# }
-
-# # 用户的推荐列表
-# user2rank_list = {
-#     1: [20, 30, 10],
-#     2: [30, 40],
-#     3: [50, 10]
-# }
-#
-# # 物品的流行度
-# pop_dict = {
-#     10: 5,
-#     20: 15,
-#     30: 25,
-#     40: 8,
-#     50: 18
-# }
-#
-# # 目标物品列表
-# target_items = torch.tensor([10, 20, 30, 40, 50])
-#
-# # Top-K 阈值
-# topk = 10
-#
 top_ns = [1]
 if args.top_n >= 5:
     for i in range(1, (args.top_n // 5) + 1):
@@ -206,18 +162,8 @@ if args.top_n >= 5:
 # Ensure the directory exists
 os.makedirs(args.data_dir, exist_ok=True)
 
-# File path for the result.txt file
-result_file = os.path.join(args.data_dir, 'result.txt')
+result_file = os.path.join(args.data_dir, 'result_seq.txt')
 
-item_pop = seq_corpus.pop
-# # 物品的流行度
-# item_pop = {
-#     10: 5,
-#     20: 15,
-#     30: 25,
-#     40: 8,
-#     50: 18
-# }
 
 with open(result_file, 'a') as f:
     f.write("{}\n".format(args.data_name))
@@ -228,28 +174,11 @@ with open(result_file, 'a') as f:
         hr = evaluate_hr(user2item_test, user2rank_list, top_n)
         ndcg = evaluate_ndcg(user2item_test, user2rank_list, top_n)
 
-        # User Group Performance
-        hr_ls = evaluate_hr_long_short(user2item_test, user2rank_list, user2item_len, top_n)
-        ndcg_ls = evaluate_ndcg_long_short(user2item_test, user2rank_list, user2item_len, top_n)
-
-        # Item Group Performance
-        pop = metric_pop_report(user2item_test, user2rank_list, item_pop, target_items, top_n)
-
         result = (
             f"Overall Performance:\n"
             f"    NDCG@{top_n}: {ndcg:.5f}\n"
             f"    HR@{top_n}: {hr:.5f}\n\n"
-            f"User Group Performance:\n"
-            f"    Short NDCG@{top_n}: {ndcg_ls['Short NDCG@' + str(top_n)]:.5f}\n"
-            f"    Short HR@{top_n}: {hr_ls['Short HR@' + str(top_n)]:.5f}\n"
-            f"    Long NDCG@{top_n}: {ndcg_ls['Long NDCG@' + str(top_n)]:.5f}\n"
-            f"    Long HR@{top_n}: {hr_ls['Long HR@' + str(top_n)]:.5f}\n\n"
-            f"Item Group Performance:\n"
-            f"    Tail NDCG@{top_n}: {pop['Tail NDCG@{}'.format(top_n)]:.5f}\n"
-            f"    Tail HR@{top_n}: {pop['Tail HR@{}'.format(top_n)]:.5f}\n"
-            f"    Popular NDCG@{top_n}: {pop['Popular NDCG@{}'.format(top_n)]:.5f}\n"
-            f"    Popular HR@{top_n}: {pop['Popular HR@{}'.format(top_n)]:.5f}\n"
         )
 
-        f.write(result)  # 写入文件
-        print(result)  # 控制台打印
+        f.write(result) 
+        print(result) 

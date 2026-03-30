@@ -5,8 +5,7 @@ import torch
 import random
 import argparse
 from transformers import T5Tokenizer
-from util1.utils import SeqDataLoader, TopNBatchify, now_time, evaluate_ndcg, evaluate_hr, evaluate_hr_long_short, \
-    evaluate_ndcg_long_short,metric_pop_report
+from util.utils import SeqDataLoader, TopNBatchify, now_time, evaluate_ndcg, evaluate_hr
 
 parser = argparse.ArgumentParser(description='ELMRec')
 parser.add_argument('--data_dir', type=str, default=None,
@@ -25,9 +24,6 @@ parser.add_argument('--num_beams', type=int, default=20,
                     help='number of beams')
 parser.add_argument('--top_n', type=int, default=10,
                     help='number of items to predict')
-
-parser.add_argument('--knn_a', type=int, default=6,
-                    help='')
 
 parser.add_argument('--model_saved_name', type=str, default='model',
                     help='')
@@ -150,23 +146,14 @@ for predictions, user in zip(idss_predicted, topn_iterator.user_list):
         except:
             prediction_list.append(random.randint(1, nitem))  # randomly generate a recommendation
     user2rank_list[user] = prediction_list
-item_pop = seq_corpus.pop
 top_ns = [1]
 if args.top_n >= 5:
     for i in range(1, (args.top_n // 5) + 1):
         top_ns.append(i * 5)
-# for top_n in top_ns:
-#     hr = evaluate_hr(user2item_test, user2rank_list, top_n)
-#     print(now_time() + 'HR@{} {:7.4f}'.format(top_n, hr))
-#     ndcg = evaluate_ndcg(user2item_test, user2rank_list, top_n)
-#     print(now_time() + 'NDCG@{} {:7.4f}'.format(top_n, ndcg))
-
-# Directory where the results should be saved
 
 # Ensure the directory exists
 os.makedirs(args.data_dir, exist_ok=True)
-# File path for the result.txt file
-result_file = os.path.join(args.data_dir, 'result_my.txt')
+result_file = os.path.join(args.data_dir, 'result_DR.txt')
 with open(result_file, 'a') as f:
     f.write("{}\n".format(args.data_name))
     f.write("topn\n model: {}, checkpoint: {}\n".format(args.model_saved_name, args.checkpoint))
@@ -176,28 +163,11 @@ with open(result_file, 'a') as f:
         hr = evaluate_hr(user2item_test, user2rank_list, top_n)
         ndcg = evaluate_ndcg(user2item_test, user2rank_list, top_n)
 
-        # User Group Performance
-        hr_ls = evaluate_hr_long_short(user2item_test, user2rank_list, user2item_len, top_n)
-        ndcg_ls = evaluate_ndcg_long_short(user2item_test, user2rank_list, user2item_len, top_n)
-
-        # Item Group Performance
-        pop = metric_pop_report(user2item_test, user2rank_list, item_pop, target_items, top_n)
-
         result = (
             f"Overall Performance:\n"
             f"    NDCG@{top_n}: {ndcg:.5f}\n"
             f"    HR@{top_n}: {hr:.5f}\n\n"
-            f"User Group Performance:\n"
-            f"    Short NDCG@{top_n}: {ndcg_ls['Short NDCG@' + str(top_n)]:.5f}\n"
-            f"    Short HR@{top_n}: {hr_ls['Short HR@' + str(top_n)]:.5f}\n"
-            f"    Long NDCG@{top_n}: {ndcg_ls['Long NDCG@' + str(top_n)]:.5f}\n"
-            f"    Long HR@{top_n}: {hr_ls['Long HR@' + str(top_n)]:.5f}\n\n"
-            f"Item Group Performance:\n"
-            f"    Tail NDCG@{top_n}: {pop['Tail NDCG@{}'.format(top_n)]:.5f}\n"
-            f"    Tail HR@{top_n}: {pop['Tail HR@{}'.format(top_n)]:.5f}\n"
-            f"    Popular NDCG@{top_n}: {pop['Popular NDCG@{}'.format(top_n)]:.5f}\n"
-            f"    Popular HR@{top_n}: {pop['Popular HR@{}'.format(top_n)]:.5f}\n"
         )
 
-        f.write(result)  # 写入文件
-        print(result)  # 控制台打印
+        f.write(result)
+        print(result) 

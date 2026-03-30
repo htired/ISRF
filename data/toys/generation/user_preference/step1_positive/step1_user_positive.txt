@@ -1,0 +1,19 @@
+You will help identify the types of toys a user is likely to prefer based on their purchase history, reviews, preferences, and interaction recency.
+
+Instructions:
+1. You will receive multiple purchase records in JSON format, sorted in reverse chronological order (most recent interactions first). Each record includes:
+{
+   "title": "The toy's title" (if unavailable, set to "None"),
+   "brand": "The toy's brand" (if unavailable, set to "None"),
+   "categories": "The toy's categories" (if unavailable, set to "None"),
+   "feature": "The possible features of the product" (if unavailable, set to "None")
+}
+Your Task:
+1. Analyze the provided data, prioritizing more recent interactions,  and generate a JSON response using the following structure:
+{
+    "summarization": "A concise summary of the types of toys products the user is likely to enjoy" (set to "None" if summarization is not possible),
+    "reasoning": "Provide a detailed explanation for the summarization. This field is mandatory and cannot be empty."
+}
+2. Ensure that the "summarization" does not exceed 100 words.
+3. The "reasoning" field must always contain a detailed explanation based on the analysis, even if summarization is not possible.
+4. Do not include any text or commentary outside the JSON response.

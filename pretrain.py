@@ -5,10 +5,10 @@ import numpy as np
 import torch
 import argparse
 from transformers import T5Tokenizer
-from model.module_cuda1_1_n_word_align import Solomon
-from util.utilsimport ExpDataLoader, SeqDataLoader, TrainBatchify, ExpBatchify, SeqBatchify, TopNBatchify, now_time
+from model.module import Solomon
+from util.utils import ExpDataLoader, SeqDataLoader, TrainBatchify, ExpBatchify, SeqBatchify, TopNBatchify, now_time
 
-parser = argparse.ArgumentParser(description='ELMRec')
+parser = argparse.ArgumentParser(description='ISRF')
 parser.add_argument('--data_dir', type=str, default=None,
                     help='directory for loading the data')
 parser.add_argument('--model_version', type=int, default=0,
@@ -27,7 +27,7 @@ parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 parser.add_argument('--log_interval', type=int, default=200,
                     help='report interval')
-parser.add_argument('--checkpoint', type=str, default='./ELMRec/',
+parser.add_argument('--checkpoint', type=str, default='./ISRF/',
                     help='directory to save the final model')
 parser.add_argument('--endure_times', type=int, default=5,
                     help='the maximum endure times of loss increasing on validation')
@@ -36,7 +36,7 @@ parser.add_argument('--exp_len', type=int, default=20,
 parser.add_argument('--negative_num', type=int, default=99,
                     help='number of negative items for top-n recommendation')
 # -----
-# alpha -> direct: {'Sports': 5, 'Beauty': 9, 'Toys': 11} sequential : {'Sports': 1, 'Beauty': 6, 'Toys': 9}
+# alpha -> direct: {'Sports': 11, 'Beauty': 11, 'Toys': 11} sequential : {'Sports': 2, 'Beauty': 9, 'Toys': 9}
 parser.add_argument('--alpha', type=int, default=11,
                     help='weight of whole-word embeddings')
 parser.add_argument('--sigma', type=int, default=5,
@@ -47,21 +47,14 @@ parser.add_argument('--L_user', type=int, default=4,
                     help='number of LightGCN layers')
 # -----
 
-parser.add_argument('--knn_a', type=int, default=7,
-                    help='')
-
 parser.add_argument('--data_name', type=str, default='beauty',
                     help='beauty, sports, toys')
 parser.add_argument('--model_saved_name', type=str, default='model',
                     help='')
-parser.add_argument('--seed', type=int, default=1111,
-                    help='1111, 2222, 3333')
+parser.add_argument('--seed', type=int, default=2025)
 
-parser.add_argument('--gpu', type=int, default='0',
-                    help='0; 1')
+parser.add_argument('--k', type=int, default=100)
 
-parser.add_argument('--k', type=int, default=100,
-                    help='0; 1')
 args = parser.parse_args()
 
 def seed_it(seed):
@@ -245,9 +238,3 @@ for epoch in range(1, args.epochs + 1):
             print(now_time() + 'Cannot endure it anymore | Exiting from early stop')
 
             break
-
-        # if epoch == 20:
-        #     break
-
-
-

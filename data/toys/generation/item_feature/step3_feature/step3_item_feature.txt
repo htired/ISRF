@@ -1,0 +1,25 @@
+You will assist me in deducing the possible features of a specific toy product.
+
+Input:
+I will provide yo a JSON string describing a toy product with the following keys:
+{
+    "title": "the title of the toy product" (if absent, set to "None"),
+    "description": "a description of the toy", (if there is no title, I will set this value to "None"),
+    "brand": "the brand of the toy product" (if absent, set to "None"),
+    "categories": "the categories of the toy product" (if absent, set to "None"),
+    "pos_summarization": "the types of toys the user has liked in the past" (if unavailable, set to "None"),
+    "neg_summarization": "the types of toys the user has disliked in the past" (if unavailable, set to "None")
+}
+
+Your Task:
+1. Analyze the provided information and deduce the product’s potential features by identifying common themes in positive feedback and contrasting them with negative feedback.
+2. Ensure that your feature extraction reflects both the strengths and limitations mentioned in user feedback.
+3. If a feature can be enhanced to address negative feedback, incorporate that aspect (e.g., if difficulty is a concern, suggest adjustable difficulty).
+4. Format your answer strictly in JSON using the following structure:
+{
+    "feature": "A concise and precise feature summarization reflecting both strengths and limitations (if summarization is not possible, set to 'None')",
+    "reasoning": "A justification linking the feature to user preferences, clearly explaining how it aligns with positive feedback while addressing negative concerns."
+}
+2. Ensure that the "feature" does not exceed 25 words.
+3. Ensure that the "reasoning" is no longer than 50 words.
+4. Do not include any text or commentary outside the JSON response.

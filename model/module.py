@@ -110,7 +110,7 @@ class Solomon(T5ForConditionalGeneration):
 
     def init_graph_embeddings(self, alpha, sigma, L,L_user, training_exp_data, user_num, item_num, dataset_dir, k):
         '''llm'''
-        llm_item_emb = pickle.load(open(dataset_dir + 'pca_item_feature.pkl', "rb"))
+        llm_item_emb = pickle.load(open(dataset_dir + 'semantic/pca_item_feature.pkl', "rb"))
         self.item_emb = nn.Embedding.from_pretrained(torch.Tensor(llm_item_emb))
         self.item_emb.weight.requires_grad = False 
         self.adapter = nn.Sequential(
@@ -131,7 +131,7 @@ class Solomon(T5ForConditionalGeneration):
         norm_adj = self.normalize_graph_mat(ui_adj)
         self.sparse_norm_adj = self.convert_sparse_mat_to_tensor(norm_adj).cuda()
 
-        sim_user_file = dataset_dir + "user_preference_{}.pkl".format(k)
+        sim_user_file = dataset_dir + "semantic/user_preference_{}.pkl".format(k)
         sparse_user_user_adj = self.create_user_user_sparse_adjacency(sim_user_file, self_connection=True)
         sparse_user_user_adj = self.normalize_graph_mat(sparse_user_user_adj)
         self.sparse_user_adj = self.convert_sparse_mat_to_tensor(sparse_user_user_adj).cuda()
@@ -238,12 +238,6 @@ class Solomon(T5ForConditionalGeneration):
 
             ''' align_loss'''
             return input_emb, input_mask, align_loss
-        # prompt_user = user_emb_llm
-        # prompt_user = prompt_user.unsqueeze(1)  # (batch_size, 1, input_size)
-        # input_emb = torch.cat([prompt_user, input_emb], 1)  # (batch_size, src_total_len, emsize)
-        # prompt_pad = torch.ones((batch_size, 1), dtype=torch.int64).to(self.model_device)
-        # input_mask = torch.cat([prompt_pad, input_mask], 1)  # (batch_size, src_total_len)
-    
         return input_emb, input_mask, None
     def forward(
         self,

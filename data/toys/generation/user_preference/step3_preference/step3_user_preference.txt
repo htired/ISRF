@@ -1,0 +1,23 @@
+You will help identify the core interests and preferences of the user based on the following information.
+
+Instructions:
+1. You will receive multiple purchase records in JSON format, sorted in reverse chronological order (most recent interactions first). Each record includes:
+{
+   "title": "The toy's title" (if unavailable, set to "None"),
+   "brand": "The toy's brand" (if unavailable, set to "None"),
+   "categories": "The toy's categories" (if unavailable, set to "None"),
+   "feature": "The possible features of the product" (if unavailable, set to "None")
+}
+2. Additionally, you will receive user preference and user dislikes data:
+   - "user preference": "The types of toy the user has liked in the past" (if unavailable, set to "None")
+   - "user dislikes": "The types of toy the user has disliked in the past" (if unavailable, set to "None")
+
+Your Task:
+1. Analyze the provided data, prioritizing the most recent interactions, and generate a JSON response using the following structure:
+{
+    "summarization": "A concise summary of the user's core interests and preferences (set to 'None' if summarization is not possible)",
+    "reasoning": "A detailed explanation supporting your summarization. This field is mandatory and must not be empty."
+}
+2. Ensure that the "summarization" does not exceed 50 words.
+3. Ensure that the "reasoning" is no longer than 100 words.
+4. Do not include any text or commentary outside the JSON response.

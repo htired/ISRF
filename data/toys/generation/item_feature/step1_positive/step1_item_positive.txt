@@ -1,0 +1,17 @@
+You will assist me in summarizing which types of users might enjoy a specific toy product.
+I will provide you with information in the form of a JSON string that describes the toy product:
+{
+    "title": "the title of the toy product", (if there is no title, I will set this value to "None")
+    "description": "a description of the toy product", (if there is no description, I will set this value to "None")
+    "brand": "the brand of the toy product", (if there is no brand, I will set this value to "None")
+    "categories": "the categories of the toy product", (if there are no categories, I will set this value to "None")
+}
+Your Task:
+1. Please provide your answer in JSON format, following this updated structure:
+{
+    "summarization": "A summary of the types of users who might enjoy this toy product" (if you cannot summarize, set this value to "None"),
+    "reasoning": "A brief explanation of why this summarization is appropriate"
+}
+2. Ensure that the "summarization" does not exceed 200 words.
+3. Ensure that the "reasoning" is no longer than 200 words.
+4. Do not include any text or commentary outside the JSON response.

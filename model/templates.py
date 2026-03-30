@@ -9,15 +9,6 @@ seq_templates = [
     'According to the purchase history of user_{}: item_{}, can you recommend the next possible item to the user?',
     'user_{} item_{}',
 ]
-seq_early_templates = [
-    "Looking at user_{}'s interaction history: item_{}, which item do you think they engaged with first?",
-    # "User_{} has interacted with these items: item_{}. Can you guess which one was among their earliest interactions?",
-    # "Here's what user_{} has interacted with: item_{}. What do you think was one of their first interactions?",
-    # "Based on user_{}'s past interactions: item_{}, which item seems like an early favorite?",
-    # "Given user_{}'s interaction sequence: item_{}, which item stands out as one of the earliest?",
-    # "User_{}'s engagement history is as follows: item_{}. Which item do you think they encountered first?",
-    # "Looking at user_{}'s activity: item_{}, can you pinpoint an item they engaged with early on?",
-]
 topn_templates = [
     'Which item of the following to recommend for user_{}? item_{}',
     'Choose the best item from the candidates to recommend for user_{}? item_{}',
@@ -36,14 +27,4 @@ exp_templates = [
     'Write an explanation for user_{} about item_{}',
     'Generate an explanation for user_{} about item_{}',
     'user_{} item_{}',
-]
-
-base_prompts = [
-    "Step 1: Summarize the main categories of products the user has recently browsed.",
-    "Step 2: Analyze these categories and the browsing sequence to identify stages of interest shift.",
-    "Step 3: Determine the current focus of interest based on recent browsing, and summarize the user's present preferences.",
-    "Step 4: Based on the above analysis, infer any common needs the user may not have satisfied yet.",
-    "Step 5: Summarize the user's brand or product style preferences based on browsing history.",
-    "Step 6: Integrate all the information to identify the next best product category to recommend, and explain your reasoning.",
-    "Step 7: Provide the final recommended product and explain your reasoning in detail."
 ]

@@ -266,10 +266,6 @@ class TrainBatchify:
         self.batch_num = self.exp_num + self.seq_num + self.topn_num
         self.batch_index = 0
 
-        '''my'''
-        file_path = data_dir+"user_timestamps_sorted.txt"  # 请替换为你的文件路径
-        self.timestamps = self.read_timestamps_from_file(file_path)
-
     def encode(self, task, input_list, output_list, users):
         encoded_source = self.tokenizer(input_list, padding=True, return_tensors='pt')
         source_seq = encoded_source['input_ids'].contiguous()
@@ -284,21 +280,6 @@ class TrainBatchify:
         task = torch.tensor(task, dtype=torch.int64)
         return task, source_seq, source_mask, whole_word, whole_word_ids_users, target_seq, users
     
-    def read_timestamps_from_file(self,file_path):
-        timestamps = []
-        
-        with open(file_path, "r") as file:
-            for line in file:
-                # 按 `:` 拆分，获取用户 ID 和时间戳列表
-                user_id, time_str = line.strip().split(": ")
-                
-                # 解析时间戳为整数列表
-                time_list = list(map(int, time_str.split()))
-                
-                # 添加到 timestamps
-                timestamps.append(time_list)
-        
-        return timestamps
 
     def next_batch(self):
         self.batch_index += 1
