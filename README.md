@@ -185,7 +185,7 @@ python extract2sum.py \
 
 ##### **Step3:Generate user preference descriptions**
 
-① Run `step3_merge2prompt.py` to construct the base user input prompts along with the previously generated positive and negative user descriptions.。
+① Run `step3_merge2prompt.py` to construct the base user input prompts along with the previously generated positive and negative user descriptions.
 
 ```sh
 python step3_merge2prompt.py \
