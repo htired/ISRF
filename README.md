@@ -258,5 +258,5 @@ python DR.py ./data/{dataset}/ --cuda --batch_size 16 --checkpoint ./checkpoint/
 
 ## :pray:Acknowledgement
 
-Code reference [ELMRec](https://github.com/WangXFng/ELMRec/tree/main), [EasyRec](https://github.com/WangXFng/ELMRec/tree/main),. 
+Code reference [ELMRec](https://github.com/WangXFng/ELMRec/tree/main), [EasyRec](https://github.com/WangXFng/ELMRec/tree/main). 
 
