@@ -55,7 +55,7 @@ python extract2sum.py \
 
 ##### **Step2:Generate negative item descriptions**
 
-① 运行 `step2_merge2prompt.py` 构建基本的物品属性提示以及之前生成的物品的总结描述。
+① Run `step2_merge2prompt.py` to construct the base item attribute prompts along with the previously generated item summary descriptions.
 
 ```sh
 python step2_merge2prompt.py \
