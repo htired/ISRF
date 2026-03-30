@@ -16,7 +16,7 @@ cd data/preparation
 
 ## :rainbow:Item feature and user preference generation
 
-> :microphone:Note: To make related information generation more convenient, we use **deepseek-chat** as the default reasoning model. You can also deploy **deepseek-r1:14b** locally as the reasoning model. For example, local reasoning can be implemented as shown in `data/{dataset}/generation/local_reasoning`.. 
+> :microphone:Note: To make related information generation more convenient, we use **deepseek-chat** as the default reasoning model. You can also deploy **deepseek-r1:14b** locally as the reasoning model. For example, local reasoning can be implemented as shown in `data/{dataset}/generation/local_reasoning`.
 
 Enter the `data/{dataset}/Generation` directory.
 
