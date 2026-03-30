@@ -82,7 +82,7 @@ python extract2sum.py \
 
 ##### **Step3:Generate item feature descriptions**
 
-:one: 运行 `step3_merge2prompt.py` 构建基本的物品属性提示以及之前生成的物品的积极与消极总结描述。
+:one:Run `step3_merge2prompt.py` to construct the base item attribute prompts, along with the previously generated positive and negative summary descriptions of items. 
 
 ```sh
 python step3_merge2prompt.py \
@@ -118,7 +118,7 @@ cd user_preference
 
 ##### **Step1:Generate positive item descriptions**
 
-① Run the following command to 准备 positive user 输入提示.
+① Run the following command to prepare the positive user input prompts.
 
 ```sh
 python user_base_prompt.py \
@@ -150,7 +150,7 @@ python extract2sum.py \
 
 ##### **Step2:Generate negative user descriptions**
 
-:one: 运行 `step2_merge2prompt.py` 构建基本的用户输入提示以及之前生成的用户的积极描述。
+:one:Run `step2_merge2prompt.py` to construct the base user input prompts along with the previously generated positive user descriptions. 
 
 ```sh
 python step2_merge2prompt.py \
@@ -181,7 +181,7 @@ python extract2sum.py \
 
 ##### **Step3:Generate user preference descriptions**
 
-① 运行 `step3_merge2prompt.py` 构建基本的用户输入提示以及之前生成的用户的积极和消极描述。
+① Run `step3_merge2prompt.py` to construct the base user input prompts along with the previously generated positive and negative user descriptions.。
 
 ```sh
 python step3_merge2prompt.py \
