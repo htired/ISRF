@@ -256,7 +256,7 @@ python SR.py ./data/{dataset}/ --cuda --batch_size 16 --checkpoint ./checkpoint/
 python DR.py ./data/{dataset}/ --cuda --batch_size 16 --checkpoint ./checkpoint/{dataset}/
 ```
 
-## Acknowledgement
+## :pray:Acknowledgement
 
 Code reference [ELMRec](https://github.com/WangXFng/ELMRec/tree/main), [EasyRec](https://github.com/WangXFng/ELMRec/tree/main),. 
 
