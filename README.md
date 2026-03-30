@@ -241,6 +241,10 @@ cd data/{dataset}/semantic
 5.  Follow the instructions in `retrieval_users.ipynb` to generate the top-K similar users pickle file: `user_preference_{}.pkl`
 6.  Follow the instructions in `pca.ipynb` to generate the item embedding pickle file: `pca_item_feature.pkl`
 
+## :art:Note (Coming Soon)
+
+For ease of reproduction, we provide the processed datasets and model checkpoints on [Google Drive](https://drive.google.com/drive/folders/1uR7unI9q_3ke994Kp-G5mvaaLJpqJl0Q?usp=drive_link).
+
 ## :airplane:Examples to run the codes
 
 :one:Pretraining ({dataset}: beauty, sports, and toys.)
