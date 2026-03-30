@@ -8,7 +8,11 @@ This is the official implementation of the WWW 2026 paper: **"Iterative Semantic
 
 :one:Download the metadata for **Toys**, **Beauty**, and **Sports** from the [Amazon review data](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/) dataset, and place the files in `data/raw/{dataset}`.
 
-:two:Run `cd data/preparation`, then use `meta2csv.ipynb` to generate the extracted attribute file `meta-toys.csv`.
+```sh
+cd data/preparation
+```
+
+:two: Then use `meta2csv.ipynb` to generate the extracted attribute file `meta-{dataset}.csv`.
 
 ## :rainbow:Item feature and user preference generation
 
