@@ -227,7 +227,14 @@ git clone https://github.com/HKUDS/EasyRec.git
    Then run the following command:
 
    ```sh
-   python encode_easyrec_ISRF.py --model baseline_embedders/easyrec-roberta-large --cuda 0 --datasets toys --output_dir ./data_ISRF --input_filename responses_feature_item.json --batch_size 128 --max_length 512 --output_filename item_feature_embedding_easyrec.pkl
+   python encode_easyrec_ISRF.py \
+   	--model baseline_embedders/easyrec-roberta-large \
+   	--cuda 0 --datasets toys \
+   	--output_dir ./data_ISRF \
+   	--input_filename responses_feature_item.json \
+   	--batch_size 128 \
+   	--max_length 512 \
+   	--output_filename item_feature_embedding_easyrec.pkl
    ```
 
 4. Move the generated files (e.g., `item_feature_embedding_easyrec.pkl` or `user_preference_embedding_easyrec.pkl`) into `data/{dataset}/semantic`
