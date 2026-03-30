@@ -1,4 +1,4 @@
-# ISRF (WWW'2026
+# ISRF (WWW'2026)
 
 This is the official implementation of the WWW 2026 paper: **"Iterative Semantic Reasoning from Individual to Group Interests for Generative Recommendation with LLMs"**.
 
