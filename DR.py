@@ -7,7 +7,7 @@ import argparse
 from transformers import T5Tokenizer
 from util.utils import SeqDataLoader, TopNBatchify, now_time, evaluate_ndcg, evaluate_hr
 
-parser = argparse.ArgumentParser(description='ELMRec')
+parser = argparse.ArgumentParser(description='ISRF')
 parser.add_argument('--data_dir', type=str, default=None,
                     help='directory for loading the data')
 parser.add_argument('--model_version', type=int, default=0,
@@ -16,7 +16,7 @@ parser.add_argument('--batch_size', type=int, default=32,
                     help='batch size')
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
-parser.add_argument('--checkpoint', type=str, default='./ELMRec/',
+parser.add_argument('--checkpoint', type=str, default='./ISRF/',
                     help='directory to load the final model')
 parser.add_argument('--negative_num', type=int, default=99,
                     help='number of negative items for top-n recommendation')
